@@ -1,0 +1,16 @@
+.grid_page {
+  height: 100vh;
+  margin: 0;
+  display: grid; 
+  grid-template-columns: 1fr; 
+  grid-template-rows: 0.3fr 2.5fr 0.2fr; 
+  gap: 0px 0px
+}
+
+.enterPhrase {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+}
+

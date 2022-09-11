@@ -1,0 +1,9 @@
+.grid_loginpage {
+  position: relative;
+  height: 100vh;
+  margin: 0;
+  display: grid; 
+  grid-template-columns: 1fr; 
+  grid-template-rows: 2.8fr 0.2fr; 
+  gap: 0px 0px 
+}

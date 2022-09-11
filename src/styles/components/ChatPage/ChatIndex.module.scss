@@ -1,0 +1,20 @@
+.grid_chat {
+  height: 100%;
+  display: grid; 
+  grid-auto-columns: 1fr; 
+  grid-template-columns: 1fr; 
+  grid-template-rows: 1.7fr 0.4fr; 
+  gap: 0px 0px; 
+}
+
+.bottom_chat_row {
+  position: relative;
+  margin: 10px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center; 
+}
+
+.chat_zone {
+  overflow: auto;
+}
