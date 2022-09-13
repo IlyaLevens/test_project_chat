@@ -1,3 +1,17 @@
+$cupid: #F7B3C2;
+$violetred: #F94583;
+$bringpink: #FB6C93;
+$lightpink: #FCA9B2;
+$prim: #E8DEE4;
+$white: #FFFFFF;
+$grey: grey;
+$black: #000000;
+$font: 'Montserrat', sans-serif;
+// transition mixin
+@mixin transition ($element, $speed, $ease-in-out) {
+  transition: $element $speed $ease-in-out;
+}
+
 .grid_loginpage {
   position: relative;
   height: 100vh;
@@ -5,5 +19,78 @@
   display: grid; 
   grid-template-columns: 1fr; 
   grid-template-rows: 2.8fr 0.2fr; 
-  gap: 0px 0px 
+  gap: 0px 0px;
+}
+.main_centering {
+  height: 60%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .form {
+    font-family: $font;
+    color: $grey;
+    font-size: 16px;
+    padding: 50px;
+    height: 250px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-bottom: 1px dashed rgba(0, 0, 0, 0.1);
+    label {
+      display: inline-block;
+      text-align: left;
+      position: relative;
+      left: 15%;
+      padding: 10px 0;
+    }
+    input {
+      font-family: 'Montserrat', sans-serif;
+      display: block;
+      color: $black;
+      max-width: 200px;
+      width: 100%;
+      padding: 10px 10px 10px;
+      margin: 0 auto;
+      border-radius: 5px;
+      border: 2px solid $prim;
+      outline: none;
+      -webkit-appearance: none;
+      &:hover {
+        border: 2px solid $cupid;
+        @include transition (all,
+        0.3s,
+        ease-in-out);
+      }
+      &:focus {
+        border: 2px solid $violetred;
+        @include transition (all,
+        0.3s,
+        ease-in-out);
+      }
+      &.password-field {
+        margin-bottom: 30px;
+      }
+    }
+    .btn {
+      border-radius: 5px;
+      display: block;
+      margin: 20px auto;
+      text-transform: uppercase;
+      background-color: $bringpink;
+      color: $white;
+      border: none;
+      line-height: 0;
+      padding: 20px;
+      &:hover, &:focus {
+        background-color: $violetred;
+        color: $white;
+        @include transition(background,
+        0.3s,
+        ease-in-out);
+        border: none;
+      }
+    }
+  }
 }

@@ -5,7 +5,7 @@ import styles from '../styles/pages/LoginPage.module.scss'
 
 const LoginPage = () => {
   return (    
-    <div className={styles.grid_loginpage}>
+    <div className={styles.grid_loginpage}> 
       <Auth />
       <Footer />
     </div>

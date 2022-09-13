@@ -10,11 +10,12 @@ function UserAvatar() {
     setPreview(pv);
   }
   function onBeforeFileLoad(elem: any) {
-    if (elem.target.files[0].size > 71680) {
+    if (elem.target.files[0].size > 102680) {
       alert("File is too big!");
       elem.target.value = "";
     }
   }
+  
   return (
     <div>
       <Avatar

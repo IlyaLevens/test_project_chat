@@ -2,25 +2,32 @@ import React, { useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import firebase from "firebase/compat/app";
 import styles from '../../styles/components/Auth.module.scss';
-import { auth } from '../../index'
-import { IsLoggedin, SetEmail } from '../../redux/Slices/AuthSlice';
+import { auth, firestore } from '../../index'
+import { IsLoggedin, SetEmail, Setusername } from '../../redux/Slices/AuthSlice';
 import { useNavigate } from 'react-router';
 import Paths from '../utils/constants';
 import { animated, Spring } from 'react-spring';
 import { Link } from 'react-router-dom';
+import page_styles from '../../styles/pages/LoginPage.module.scss'
 
 function Auth() {
   //redux
   const dispatch = useDispatch();
   var logged_in = useSelector<any, boolean>(state => state.AuthSlice.logged_in);
+  var username = useSelector<any, string>(state => state.AuthSlice.username);
 
-  const emailRef = useRef<HTMLInputElement>(null);
-  const passwordRef = useRef<HTMLInputElement>(null);
-  const logformRef = useRef<HTMLFormElement>(null);
+  //signinRefs
+  const signinemailRef = useRef<HTMLInputElement>(null);
+  const signinpasswordRef = useRef<HTMLInputElement>(null);
+  //signupRefs  
+  const signupemailRef = useRef<HTMLInputElement>(null); 
+  const signuppasswordRef = useRef<HTMLInputElement>(null);
+  const SigninformRef = useRef<HTMLFormElement>(null);
+  const SignupformRef = useRef<HTMLFormElement>(null);
+  const UserNameRef = useRef<HTMLInputElement>(null);
 
   const [LogformVisible, setLogformVisibility] = useState(false);
 
-  console.log(`visibility - ${LogformVisible}`);
   //navigation
   const navigate = useNavigate();
 
@@ -29,43 +36,51 @@ function Auth() {
     const provider = new firebase.auth.GoogleAuthProvider();
     const user = await auth.signInWithPopup(provider);
     logged_in = true;
+    dispatch(Setusername(user.user?.displayName));
     dispatch(IsLoggedin(logged_in));   
     dispatch(SetEmail(user.user?.email));
     console.log(user);
     navigate(Paths.MAIN_PAGE_ROUTE);
   }
-
+  
   const SignupwithEmail = async (event: any) => {
     event?.preventDefault();
     auth.createUserWithEmailAndPassword(
-      emailRef?.current?.value ?? 'no-value',
-      passwordRef?.current?.value ?? 'no-value',
+      signupemailRef?.current?.value ?? 'no-value',
+      signuppasswordRef?.current?.value ?? 'no-value',
     ).then(user=>{
       console.log(user);
       logged_in = true;
+      console.log(`usernameref - ${UserNameRef?.current?.value}`); 
+      firestore.collection('UserNames').add({
+        uid: user.user?.uid,
+        username: UserNameRef?.current?.value
+      }).catch(err => {console.log(err)}); 
+      dispatch(Setusername(UserNameRef?.current?.value));     
       dispatch(IsLoggedin(logged_in));  
-      dispatch(SetEmail(user.user?.email));
-      logformRef?.current?.reset();
+      dispatch(SetEmail(user.user?.email)); 
+      SignupformRef?.current?.reset();    
     }).catch(err=>{
-      console.log(err);
-    })
+      console.log(err);     
+    })    
     //navigate(Paths.MAIN_PAGE_ROUTE);
   }
+  
 
   const SigninwithEmail = async (event: any) => {
     event?.preventDefault();
     auth.signInWithEmailAndPassword(
-      emailRef?.current?.value ?? 'no-value',
-      passwordRef?.current?.value ?? 'no-value',
+      signinemailRef?.current?.value ?? 'no-value',
+      signinpasswordRef?.current?.value ?? 'no-value',
     ).then(user=>{
       console.log(user);
       logged_in = true;
       dispatch(IsLoggedin(logged_in));      
-      dispatch(SetEmail(user?.user?.email));     
-      logformRef?.current?.reset();
+      dispatch(SetEmail(user?.user?.email));
+      SigninformRef?.current?.reset();          
     }).catch(err=>{
       console.log(err);
-    })
+    })   
     //navigate(Paths.MAIN_PAGE_ROUTE);
   }
 
@@ -90,8 +105,10 @@ function Auth() {
           </>       
         }        
       </div>
-      <div className={styles.SignInForm}>
-        <div>
+      {logged_in ?
+          <div></div>
+        :
+        <div className={page_styles.main_centering}>
           <Spring
             from={{opacity: 0}}
             to={{opacity: 1}}
@@ -99,17 +116,32 @@ function Auth() {
             reset={LogformVisible}
           >
             {(props: any) => (
-              <animated.form style={props} ref={logformRef} action=''>
-                <input type='text' ref={emailRef}/>
-                <input type='text' ref={passwordRef}/>
-                <button onClick={SignupwithEmail}>Sign up</button>
-                <h4>Already registered?</h4> 
-                <button onClick={SigninwithEmail}>Sign in</button>                
-              </animated.form>
+              <div style={{display: 'flex'}}>   
+                <div className={page_styles.si_form}>          
+                  <animated.form style={props} ref={SigninformRef} action='' className={page_styles.form}>
+                    <label htmlFor="si-email">Email</label>
+                    <input type='email' ref={signinemailRef}/>
+                    <label htmlFor="password">Password</label>
+                    <input type='password' ref={signinpasswordRef}/>
+                    <button className={page_styles.btn} onClick={SigninwithEmail}>Sign in</button>                
+                  </animated.form>
+                </div> 
+                <div className={page_styles.su_form}>
+                  <animated.form style={props} ref={SignupformRef} action='' className={page_styles.form}>
+                    <label htmlFor="su-name">Name</label>
+                    <input type='text' ref={UserNameRef}/>
+                    <label htmlFor="su-email">Email</label>
+                    <input type='email' ref={signupemailRef} required/>
+                    <label htmlFor="su-password">Password</label>
+                    <input type='password' ref={signuppasswordRef} required/>
+                    <button className={page_styles.btn} onClick={SignupwithEmail}>Sign up</button>           
+                  </animated.form>
+                </div>                                                             
+              </div>
             )}
           </Spring>                
         </div>
-      </div>
+      }
     </div>
   )
 }

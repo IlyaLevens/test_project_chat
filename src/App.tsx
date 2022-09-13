@@ -14,6 +14,7 @@ import { auth } from '.';
 import PrivateRoute from './components/CustomRoutes/PrivateRoute';
 import LoginPage from './pages/LoginPage';
 import Loading from './components/Loading';
+import UserProfile from './pages/UserProfile';
 //import { auth } from '.';
 
 
@@ -58,6 +59,14 @@ function App() {
             :
             <Route path={Paths.CHAT_PAGE_ROUTE} element={<PrivateRoute path={Paths.LOGIN_PAGE_ROUTE}/>}>
               <Route path={Paths.CHAT_PAGE_ROUTE} element={<Chat />}/>
+            </Route>          
+          }
+          {/* private path for UserProfile page */}
+          {logged_in ?
+            <Route path={Paths.USERPROFILE_PAGE_ROUTE} element={<UserProfile />}/>
+            :
+            <Route path={Paths.USERPROFILE_PAGE_ROUTE} element={<PrivateRoute path={Paths.LOGIN_PAGE_ROUTE}/>}>
+              <Route path={Paths.USERPROFILE_PAGE_ROUTE} element={<UserProfile />}/>
             </Route>          
           }
           {/* path for login page */}
