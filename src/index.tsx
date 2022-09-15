@@ -7,8 +7,10 @@ import reportWebVitals from './reportWebVitals';
 import firebase from "firebase/compat/app";
 import "firebase/compat/firestore";
 import "firebase/compat/auth";
-import { store } from './redux/store';
+import store from './redux/store';
+import { PersistGate } from 'redux-persist/integration/react';
 import { Provider } from 'react-redux';
+import { persistor } from './redux/store';
 
 firebase.initializeApp({
   apiKey: "AIzaSyDaNlF0OLG02wD7qlh2j9FFp20tk6PBnlE",
@@ -29,7 +31,9 @@ root.render(
   
   <BrowserRouter>
     <Provider store={store}>
-      <App />
+      <PersistGate loading={null} persistor={persistor}>
+        <App />
+      </PersistGate>
     </Provider>    
   </BrowserRouter>
 );

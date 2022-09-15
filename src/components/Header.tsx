@@ -1,4 +1,3 @@
-import React from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -7,8 +6,6 @@ import styles from '../styles/components/Header.module.scss';
 
 function Header()  {
   const [user] = useAuthState(auth as any);
-
-  var username = useSelector<any, boolean>(state => state.AuthSlice.username);
 
   return (
     <div className={`${styles.grid_header} ${styles.background}`}>
@@ -20,13 +17,13 @@ function Header()  {
       <div className={styles.links}>
         <Link to='/login'>Log in page</Link>
         {user ?
-          <Link to='/profile'>{username}</Link>
+          <Link to='/profile'>{user.displayName}</Link>
           :
           <>
             <div>no user</div>
-            <div></div>
           </>
         }
+        <div></div>
       </div>
     </div>
   )

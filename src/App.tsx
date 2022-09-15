@@ -8,8 +8,7 @@ import Chat from './pages/Chat';
 import NotFound from './pages/NotFound';
 import Paths from './components/utils/constants';
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { useDispatch, useSelector } from 'react-redux';
-import { IsLoggedin } from './redux/Slices/AuthSlice';
+import { useSelector } from 'react-redux';
 import { auth } from '.';
 import PrivateRoute from './components/CustomRoutes/PrivateRoute';
 import LoginPage from './pages/LoginPage';
@@ -19,31 +18,10 @@ import UserProfile from './pages/UserProfile';
 
 
 function App() {
-  const dispatch = useDispatch();
- 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [user, loading] = useAuthState(auth as any);
 
   var logged_in = useSelector<any, boolean>(state => state.AuthSlice.logged_in);
-  
-  function Change_logged_in_(boolean: boolean) {
-    logged_in = !boolean;
-  }
-  
-  React.useEffect(() => {
-    auth.onAuthStateChanged((user) => {      
-      if (loading) {
-        console.log(`loading`)
-      }      
-      if (user) {           
-        Change_logged_in_(logged_in);
-        dispatch(IsLoggedin(logged_in));    
-      } else {
-        console.log(`not logged_in`);
-      }         
-    })                
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   if (loading) {
     return <Loading />

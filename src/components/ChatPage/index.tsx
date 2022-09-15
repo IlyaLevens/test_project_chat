@@ -14,7 +14,7 @@ const Index = () => {
   const messageRef = useRef<HTMLInputElement>(null);
 
   //getting data from firebase
-  const [messages, setMessages] = useState<{ id: string; email: string; text: string }[]>([])
+  const [messages, setMessages] = useState<{id: string; email:  string; username: string; text: string}[]>([])
   useEffect(() => {
     firestore
     .collection('messages')
@@ -23,6 +23,7 @@ const Index = () => {
       const messages = snapshot.docs.map((doc) =>({
         id: doc.id,
         email: doc.get('email'),
+        username: doc.get('username'),
         text: doc.get('text')
       }))
       setMessages(messages);
@@ -34,8 +35,9 @@ const Index = () => {
   const sendMessage = async (event: any) => {   
     event?.preventDefault();
     firestore.collection('messages').add({
-      uid: user?.uid,
+      uid: user?.uid,     
       email: user?.email,
+      username: user?.displayName,
       text: messageRef.current?.value,
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     }).catch(err => {console.log(err)})    
@@ -51,15 +53,15 @@ const Index = () => {
       <div className={styles.chat_zone}>
         {messages.map(message => 
           <div key={message.id}>
-            <div>{message.email}</div>
+            <div>{message.username}</div>
             <div>{message.text}</div>
           </div>
         )}
       </div>
       <div className={styles.bottom_chat_row}>
-        <form ref={chatFormRef} action=''>
+        <form ref={chatFormRef} onSubmit={sendMessage} action=''>
           <input ref={messageRef} className={input_styles.input} type='text' name='chat_input' placeholder='Enter a massage...' />
-          <button onClick={sendMessage}>send</button>
+          <button type='submit'>send</button>
         </form>
       </div>
     </div>

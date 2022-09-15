@@ -1,20 +1,20 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import firebase from "firebase/compat/app";
 import styles from '../../styles/components/Auth.module.scss';
 import { auth, firestore } from '../../index'
 import { IsLoggedin, SetEmail, Setusername } from '../../redux/Slices/AuthSlice';
 import { useNavigate } from 'react-router';
+import { doc, getDoc } from 'firebase/firestore';
 import Paths from '../utils/constants';
 import { animated, Spring } from 'react-spring';
 import { Link } from 'react-router-dom';
-import page_styles from '../../styles/pages/LoginPage.module.scss'
+import page_styles from '../../styles/pages/LoginPage.module.scss';
 
 function Auth() {
   //redux
   const dispatch = useDispatch();
   var logged_in = useSelector<any, boolean>(state => state.AuthSlice.logged_in);
-  var username = useSelector<any, string>(state => state.AuthSlice.username);
 
   //signinRefs
   const signinemailRef = useRef<HTMLInputElement>(null);
@@ -45,27 +45,35 @@ function Auth() {
   
   const SignupwithEmail = async (event: any) => {
     event?.preventDefault();
+    const Username = UserNameRef?.current?.value;
     auth.createUserWithEmailAndPassword(
       signupemailRef?.current?.value ?? 'no-value',
       signuppasswordRef?.current?.value ?? 'no-value',
     ).then(user=>{
       console.log(user);
-      logged_in = true;
-      console.log(`usernameref - ${UserNameRef?.current?.value}`); 
-      firestore.collection('UserNames').add({
-        uid: user.user?.uid,
-        username: UserNameRef?.current?.value
-      }).catch(err => {console.log(err)}); 
-      dispatch(Setusername(UserNameRef?.current?.value));     
+      user.user?.updateProfile({
+        displayName: Username
+      })
+      logged_in = true;  
+      // firestore.collection('UserData').add({
+      //   uid: user.user?.uid,
+      //   username: Friends
+      // })
+      // .catch(err => {console.log(err)}); 
+      dispatch(Setusername(Username));     
       dispatch(IsLoggedin(logged_in));  
       dispatch(SetEmail(user.user?.email)); 
       SignupformRef?.current?.reset();    
     }).catch(err=>{
       console.log(err);     
     })    
-    //navigate(Paths.MAIN_PAGE_ROUTE);
   }
   
+  // const docRef = doc(firestore, 'UserData', 'JkikGs60L2QowD7TdvS9');
+  // getDoc(docRef).then((doc) => {
+  //   console.log(doc);
+  // });
+
 
   const SigninwithEmail = async (event: any) => {
     event?.preventDefault();
@@ -81,13 +89,14 @@ function Auth() {
     }).catch(err=>{
       console.log(err);
     })   
-    //navigate(Paths.MAIN_PAGE_ROUTE);
   }
 
   const logout = async () => {
     auth.signOut();
     logged_in = false;
     dispatch(IsLoggedin(logged_in));
+    dispatch(Setusername(''));
+    dispatch(SetEmail('')); 
     navigate(Paths.MAIN_PAGE_ROUTE);
   } 
 
