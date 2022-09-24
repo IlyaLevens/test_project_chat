@@ -5,7 +5,6 @@ const initialState = {
   logged_in: false,
   email: '',
   username: '',
-  id: ''
 }
 
 const AuthSlice = createSlice({

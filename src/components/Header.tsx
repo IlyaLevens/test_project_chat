@@ -1,5 +1,4 @@
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { auth } from '..';
 import styles from '../styles/components/Header.module.scss';

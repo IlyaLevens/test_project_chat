@@ -4,7 +4,7 @@ import {
   Route,
 } from "react-router-dom";
 import Home from './pages/Home';
-import Chat from './pages/Chat';
+import Chat from './pages/ChatPage';
 import NotFound from './pages/NotFound';
 import Paths from './components/utils/constants';
 import { useAuthState } from 'react-firebase-hooks/auth'

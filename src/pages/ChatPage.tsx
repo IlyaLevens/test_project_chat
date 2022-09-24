@@ -2,16 +2,21 @@ import React from 'react'
 import styles from '../styles/pages/Chat.module.scss';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import ChatPage from '../components/ChatPage';
+import Chat from '../components/Chat';
+import FriendSearchEngine from '../components/Chat/FriendSearchEngine';
+import FriendList from '../components/Chat/FriendList';
 
-function Chat()  {
+function ChatPage()  {
   return (
     <div className={styles.grid_page}>
       <Header />
       <div className={styles.grid_main}>
-        <div>friends</div>
+        <div className={styles.friend_list}>
+          <FriendSearchEngine />
+          <FriendList />
+        </div>       
         <div className={styles.chat_container}>
-          <ChatPage />
+          <Chat />
         </div>
       </div>
       <Footer />
@@ -19,4 +24,4 @@ function Chat()  {
   )
 }
 
-export default Chat;
+export default ChatPage;

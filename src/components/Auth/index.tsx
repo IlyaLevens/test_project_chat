@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import firebase from "firebase/compat/app";
 import styles from '../../styles/components/Auth.module.scss';
@@ -26,21 +26,27 @@ function Auth() {
   const SignupformRef = useRef<HTMLFormElement>(null);
   const UserNameRef = useRef<HTMLInputElement>(null);
 
-  const [LogformVisible, setLogformVisibility] = useState(false);
-
   //navigation
   const navigate = useNavigate();
 
   //login functions
   const loginwithGoogle = async () => {
     const provider = new firebase.auth.GoogleAuthProvider();
-    const user = await auth.signInWithPopup(provider);
-    logged_in = true;
-    dispatch(Setusername(user.user?.displayName));
-    dispatch(IsLoggedin(logged_in));   
-    dispatch(SetEmail(user.user?.email));
-    console.log(user);
-    navigate(Paths.MAIN_PAGE_ROUTE);
+    auth.signInWithPopup(provider).then((user) => {    
+      logged_in = true;
+      dispatch(Setusername(user.user?.displayName));
+      dispatch(IsLoggedin(logged_in));   
+      dispatch(SetEmail(user.user?.email));
+      console.log(user);
+      navigate(Paths.MAIN_PAGE_ROUTE);
+      if (user?.additionalUserInfo?.isNewUser) {
+        firestore.collection('UserData').add({
+          uid: user.user?.uid,
+          username: user.user?.displayName,
+          friends: []          
+        })
+      }
+    });
   }
   
   const SignupwithEmail = async (event: any) => {
@@ -55,11 +61,12 @@ function Auth() {
         displayName: Username
       })
       logged_in = true;  
-      // firestore.collection('UserData').add({
-      //   uid: user.user?.uid,
-      //   username: Friends
-      // })
-      // .catch(err => {console.log(err)}); 
+      firestore.collection('UserData').add({
+        uid: user.user?.uid,
+        username: Username,
+        friends: []
+      })
+      .catch(err => {console.log(err)}); 
       dispatch(Setusername(Username));     
       dispatch(IsLoggedin(logged_in));  
       dispatch(SetEmail(user.user?.email)); 
@@ -69,10 +76,10 @@ function Auth() {
     })    
   }
   
-  // const docRef = doc(firestore, 'UserData', 'JkikGs60L2QowD7TdvS9');
-  // getDoc(docRef).then((doc) => {
-  //   console.log(doc);
-  // });
+  const docRef = doc(firestore, 'UserData', '9xVA7odUwv3zGn6MmZJP');
+  getDoc(docRef).then((doc) => {
+    console.log(doc);
+  });
 
 
   const SigninwithEmail = async (event: any) => {
@@ -108,8 +115,7 @@ function Auth() {
         {logged_in ?
           <button onClick={logout}>sign out</button>
           :
-          <>
-            <button onClick={() => setLogformVisibility(!LogformVisible)}>sign in with email</button>          
+          <>        
             <button onClick={loginwithGoogle}>sign in with Google</button>
           </>       
         }        
@@ -122,7 +128,6 @@ function Auth() {
             from={{opacity: 0}}
             to={{opacity: 1}}
             config={{duration: 2000}}
-            reset={LogformVisible}
           >
             {(props: any) => (
               <div style={{display: 'flex'}}>   
