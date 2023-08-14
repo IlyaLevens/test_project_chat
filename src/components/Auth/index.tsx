@@ -5,7 +5,6 @@ import styles from '../../styles/components/Auth.module.scss';
 import { auth, firestore } from '../../index'
 import { IsLoggedin, SetEmail, Setusername } from '../../redux/Slices/AuthSlice';
 import { useNavigate } from 'react-router';
-import { doc, getDoc } from 'firebase/firestore';
 import Paths from '../utils/constants';
 import { animated, Spring } from 'react-spring';
 import { Link } from 'react-router-dom';
@@ -40,10 +39,9 @@ function Auth() {
       console.log(user);
       navigate(Paths.MAIN_PAGE_ROUTE);
       if (user?.additionalUserInfo?.isNewUser) {
-        firestore.collection('UserData').add({
+        firestore.collection('UserData').doc(user.user?.uid).set({
           uid: user.user?.uid,
           username: user.user?.displayName,
-          friends: []          
         })
       }
     });
@@ -61,25 +59,22 @@ function Auth() {
         displayName: Username
       })
       logged_in = true;  
-      firestore.collection('UserData').add({
+      firestore.collection('UserData').doc(user.user?.uid).set({
         uid: user.user?.uid,
         username: Username,
-        friends: []
       })
       .catch(err => {console.log(err)}); 
       dispatch(Setusername(Username));     
       dispatch(IsLoggedin(logged_in));  
-      dispatch(SetEmail(user.user?.email)); 
+      dispatch(SetEmail(user.user?.email));
       SignupformRef?.current?.reset();    
     }).catch(err=>{
       console.log(err);     
     })    
   }
-  
-  const docRef = doc(firestore, 'UserData', '9xVA7odUwv3zGn6MmZJP');
-  getDoc(docRef).then((doc) => {
-    console.log(doc);
-  });
+  // firestore.collection('UserData').doc('P1i5STvd7hMGXh26DtGRwhZFsHf1').collection('UserFriends').onSnapshot((snapshot) => {
+  //   snapshot.docs.map((doc) => {console.log(doc.data())});
+  // })
 
 
   const SigninwithEmail = async (event: any) => {
@@ -88,10 +83,10 @@ function Auth() {
       signinemailRef?.current?.value ?? 'no-value',
       signinpasswordRef?.current?.value ?? 'no-value',
     ).then(user=>{
-      console.log(user);
       logged_in = true;
       dispatch(IsLoggedin(logged_in));      
       dispatch(SetEmail(user?.user?.email));
+      //dispatch(SetUserChats(Userchats));
       SigninformRef?.current?.reset();          
     }).catch(err=>{
       console.log(err);

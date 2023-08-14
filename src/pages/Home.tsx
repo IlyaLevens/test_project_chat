@@ -10,7 +10,7 @@ function Home()  {
     <div className={styles.grid_page}>
       <Header />
       <div className={styles.enterPhrase}>
-        <Loading />
+        <div>Welcome</div>
       </div>
       <Footer />
     </div>

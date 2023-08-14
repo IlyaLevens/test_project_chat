@@ -32,7 +32,7 @@ function App() {
           {/* path for main page */}
           <Route path={Paths.MAIN_PAGE_ROUTE} element={<Home />}/>
           {/* private path for chat page */}
-          {logged_in ?
+          {logged_in && user ?
             <Route path={Paths.CHAT_PAGE_ROUTE} element={<Chat />}/>
             :
             <Route path={Paths.CHAT_PAGE_ROUTE} element={<PrivateRoute path={Paths.LOGIN_PAGE_ROUTE}/>}>
@@ -40,7 +40,7 @@ function App() {
             </Route>          
           }
           {/* private path for UserProfile page */}
-          {logged_in ?
+          {logged_in && user ?
             <Route path={Paths.USERPROFILE_PAGE_ROUTE} element={<UserProfile />}/>
             :
             <Route path={Paths.USERPROFILE_PAGE_ROUTE} element={<PrivateRoute path={Paths.LOGIN_PAGE_ROUTE}/>}>

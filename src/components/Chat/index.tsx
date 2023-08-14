@@ -6,7 +6,6 @@ import styles from '../../styles/components/ChatPage/ChatIndex.module.scss'
 import input_styles from '../../styles/components/ChatPage/ChatInput.module.scss'
 import firebase from "firebase/compat/app";
 import Loading from '../Loading';
-
 const Index = () => {
   const [user, loading] = useAuthState(auth as any);
   console.log(user);
