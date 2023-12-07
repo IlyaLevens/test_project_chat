@@ -59,7 +59,6 @@ const FriendSearchEngine = () => {
       <div style={{display: 'flex'}}>
         {/*<input type='text' value={inputValue} ref={SearchBarRef} onChange={e => onChangeInput(e)} className={styles.input} placeholder='Search for friends...'/>*/}    
         <form className="search">
-	        <label className="search__label" htmlFor="search">Search</label>
 	        <div className="search__input-wrap">
 		      <input className={styles.search__input} value={inputValue} id="search" ref={SearchBarRef} onChange={e => onChangeInput(e)} type="text" name="search" placeholder="Search…"/>
 	</div>

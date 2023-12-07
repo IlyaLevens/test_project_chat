@@ -104,7 +104,7 @@ const Index = () => {
       </div>
       <div className={styles.bottom_chat_row}>
         <form ref={chatFormRef} onSubmit={sendMessage} style={{display: 'flex', width: 400}}action=''>
-          <input ref={messageRef} className={input_styles.input} type='text' name='chat_input' placeholder='Enter a massage...' />
+          <input ref={messageRef} className={input_styles.input} type='text' name='chat_input' placeholder='Enter a message...' />
           <button type='submit'>send</button>
         </form>
       </div>

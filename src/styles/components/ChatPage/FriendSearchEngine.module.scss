@@ -24,7 +24,6 @@ input {
 }
 body {
 	background-color: var(--bg);
-	display: flex;
 	height: 100vh;
 	transition:
 		background-color var(--trans-dur),
