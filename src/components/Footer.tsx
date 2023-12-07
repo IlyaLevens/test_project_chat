@@ -8,7 +8,6 @@ function Footer()  {
     function handleOnlineStatus() {
       setOnlineStatus(navigator.onLine);
     }
-
     window.addEventListener('online', handleOnlineStatus);
     window.addEventListener('offline', handleOnlineStatus);
 
@@ -20,7 +19,6 @@ function Footer()  {
   return (
     <div className={styles.background}>
       <div>
-        <h1>{onlineStatus ? 'Online' : 'Offline'}</h1>
       </div>
     </div>
   )

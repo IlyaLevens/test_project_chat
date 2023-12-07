@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": "../../../.."
+		},
+		{
+			"name": "test_project_chat",
+			"path": "../../.."
+		}
+	],
+	"settings": {}
+}

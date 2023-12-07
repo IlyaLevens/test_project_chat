@@ -8,7 +8,9 @@ function Header()  {
 
   return (
     <div className={`${styles.grid_header} ${styles.background}`}>
-      <p>title</p>
+      <div className={`${styles.grid_logo}`}>
+        <img src="logo and other/logo-1.png" className={`${styles.logo}`}/>
+      </div>
       <div className={styles.links}>
         <Link to='/'>Main page</Link>
         <Link to='/chat'>start chatting</Link>       

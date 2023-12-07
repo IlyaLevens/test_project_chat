@@ -2,3 +2,186 @@
   height: 40px;
   width: 100%;
 }
+* {
+	border: 0;
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+:root {
+	--hue: 223;
+	--bg: hsl(var(--hue),90%,90%);
+	--fg: hsl(var(--hue),90%,10%);
+	--trans-dur: 0.3s;
+	--trans-timing: cubic-bezier(0.65,0,0.35,1);
+	font-size: calc(20px + (40 - 20) * (100vw - 320px) / (2560 - 320));
+}
+body,
+button,
+input {
+	color: var(--fg);
+	font: 1em/1.5 "DM Sans", sans-serif;
+}
+body {
+	background-color: var(--bg);
+	display: flex;
+	height: 100vh;
+	transition:
+		background-color var(--trans-dur),
+		color var(--trans-dur);
+}
+.search,
+.search__icon,
+.search__input {
+	color: hsl(0,0%,100%);
+}
+.search {
+	margin: auto;
+	width: 12em;
+}
+.search__button,
+.search__input {
+	outline: transparent;
+}
+.search__button {
+	background-color: transparent;
+	cursor: pointer;
+	display: block;
+	position: absolute;
+	top: 0;
+	right: 0.125em;
+	width: 2.25em;
+	height: 2.25em;
+	-webkit-tap-highlight-color: transparent;
+}
+[dir="rtl"] .search__button {
+	right: auto;
+	left: 0.125em;
+	transform: scaleX(-1);
+}
+.search__icon {
+	display: block;
+	margin: auto;
+	transition: color 0.15s linear;
+	width: 2.25em;
+	height: 2.25em;
+}
+.search__button:focus-visible .search__icon,
+.search__button:hover .search__icon {
+	color: hsl(var(--hue),90%,80%);
+}
+.search__icon-ellipse {
+	transition: ry var(--trans-dur) var(--trans-timing);
+}
+.search__icon-g,
+.search__icon-line2,
+.search__icon-line3  {
+	transition: transform var(--trans-dur) var(--trans-timing);
+}
+.search__icon-g {
+	transform: translate(6px,6px);
+	transform-origin: 12px 12px;
+}
+.search__icon-line2,
+.search__icon-line3 {
+	transform-origin: 21px 21px;
+}
+.search__input {
+	background-color: hsl(var(--hue),90%,60%);
+	border-radius: 0.5em;
+	box-shadow: 0 0.5em 1em hsla(var(--hue),90%,60%,0.4);
+	padding: 0.125em 0.75em;
+	padding-inline-end: 2.375em;
+	transition:
+		background-color var(--trans-dur),
+		box-shadow 0.15s linear;
+	width: 100%;
+	height: 2.25em;
+}
+.search__input::placeholder {
+	color: hsl(var(--hue),90%,80%);
+	transition: color var(--trans-dur);
+}
+.search__input-wrap {
+	position: relative;
+}
+.search__label {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+}
+
+/* `:focus` state */
+.search__button:focus .search__icon-ellipse,
+.search__button:hover .search__icon-ellipse,
+.search__input:focus + .search__button .search__icon-ellipse {
+	ry: 0.01px;
+}
+.search__button:focus .search__icon-g,
+.search__button:hover .search__icon-g,
+.search__input:focus + .search__button .search__icon-g {
+	transform: translate(6px,6px) rotate(-45deg);
+}
+.search__button:focus .search__icon-line2,
+.search__button:hover .search__icon-line2,
+.search__input:focus + .search__button .search__icon-line2 {
+	transform: rotate(-45deg);
+}
+.search__button:focus .search__icon-line3,
+.search__button:hover .search__icon-line3,
+.search__input:focus + .search__button .search__icon-line3 {
+	transform: rotate(45deg);
+}
+
+/* “searched” state */
+.search--searched .search__button {
+	animation: search-icon-bounce var(--trans-dur);
+}
+[dir="rtl"] .search--searched .search__button {
+	animation: search-icon-bounce-rtl var(--trans-dur);
+}
+.search--searched .search__icon-ellipse,
+.search--searched .search__icon-g,
+.search--searched .search__icon-line2,
+.search--searched .search__icon-line3  {
+	transition-delay: var(--trans-dur);
+}
+
+/* Dark theme */
+@media (prefers-color-scheme: dark) {
+	:root {
+		--bg: hsl(var(--hue),90%,10%);
+		--fg: hsl(var(--hue),90%,90%);
+	}
+	.search__input {
+		background-color: hsl(var(--hue),90%,40%);
+		box-shadow: 0 0.5em 1em hsla(var(--hue),90%,40%,0.4);
+	}
+	.search__input::placeholder {
+		color: hsl(var(--hue),90%,70%);
+	}
+}
+
+/* Animations */
+@keyframes search-icon-bounce {
+	from,
+	to {
+		animation-timing-function: cubic-bezier(0.65,0,1,1);
+		transform: translateX(0);
+	}
+	50% {
+		animation-timing-function: cubic-bezier(0,0,0.35,1);
+		transform: translateX(12.5%);
+	}
+}
+@keyframes search-icon-bounce-rtl {
+	from,
+	to {
+		animation-timing-function: cubic-bezier(0.65,0,1,1);
+		transform: scaleX(-1) translateX(0);
+	}
+	50% {
+		animation-timing-function: cubic-bezier(0,0,0.35,1);
+		transform: scaleX(-1) translateX(12.5%);
+	}
+}
